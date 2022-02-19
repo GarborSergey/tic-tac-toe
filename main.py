@@ -1,6 +1,6 @@
 import pygame
 import random
-
+import os
 # Initialize the game engine
 pygame.init()
 # Define the colors we will use in RGB format
@@ -49,6 +49,12 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Tic-tac-toe")
 done = False
 FPS = 30
+
+# Images
+win_image = pygame.image.load('images'+os.sep+'win_post.png')
+win_image_position = win_image.get_rect(center=(int(W/2), int(H/2)))
+lose_image = pygame.image.load('images'+os.sep+'lose.png')
+lose_image_position = lose_image.get_rect(center=(int(W/2), int(H/2)))
 
 
 class Cross:
@@ -162,6 +168,20 @@ def win_check(d: dict):
         return False
 
 
+# Nobody winner check
+def dead_heat_check():
+    free_area = 9
+    for key in draw_dict_II:
+        if draw_dict_II[key] != False:
+            free_area -= 1
+
+    if not win_check(draw_dict) and not win_check(draw_dict_II) and free_area == 0:
+        return True
+    else:
+        return False
+
+
+
 while not done:
 
     # This limits the wile loop to a max of 30 times per second
@@ -174,15 +194,18 @@ while not done:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:  # Click ESC fo exit
                 done = True
-        elif event.type == pygame.MOUSEBUTTONUP:  # event.pos - mouse coordinates
+        elif event.type == pygame.MOUSEBUTTONUP and not win_check(draw_dict) and not win_check(draw_dict_II):  # event.pos - mouse coordinates
             draw_figure(draw_coordinate(event.pos))
             comparison_dict()
             draw_ii()
-            print('user --->', win_check(draw_dict))
-            print('II --->', win_check(draw_dict_II))
+            print(draw_dict)
+            print(draw_dict_II)
+            print(dead_heat_check())
 
     screen.fill(WHITE)
     playing_field()
+
+
 
     for key in draw_dict:
         if draw_dict[key]:
@@ -191,5 +214,10 @@ while not done:
     for key in draw_dict_II:
         if draw_dict_II[key]:
             Zero(area_cen_cord[key][0], area_cen_cord[key][1]).draw_it()
+
+    if win_check(draw_dict):
+        screen.blit(win_image, win_image_position)
+    elif win_check(draw_dict_II):
+        screen.blit(lose_image, lose_image_position)
 
     pygame.display.flip()

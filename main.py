@@ -55,6 +55,8 @@ win_image = pygame.image.load('images'+os.sep+'win_post.png')
 win_image_position = win_image.get_rect(center=(int(W/2), int(H/2)))
 lose_image = pygame.image.load('images'+os.sep+'lose.png')
 lose_image_position = lose_image.get_rect(center=(int(W/2), int(H/2)))
+dead_head_image = pygame.image.load('images' + os.sep + 'dead_head.png')
+dead_head_image_position = dead_head_image.get_rect(center=(int(W/2), int(H/2)))
 
 
 class Cross:
@@ -180,6 +182,33 @@ def dead_heat_check():
     else:
         return False
 
+def restart_game():
+
+    for key in draw_dict:
+        draw_dict[key] = False
+
+    for key in draw_dict_II:
+        draw_dict_II[key] = False
+
+
+def event_type(e):
+    global done
+    if e.type == pygame.QUIT:
+        done = True
+    elif e.type == pygame.KEYDOWN:
+        if e.key == pygame.K_ESCAPE:
+            done = True
+        elif e.key == pygame.K_r and (win_check(draw_dict) or win_check(draw_dict_II) or dead_heat_check()):
+            restart_game()
+    elif e.type == pygame.MOUSEBUTTONUP and not win_check(draw_dict) and not win_check(draw_dict_II):
+        draw_figure(draw_coordinate(event.pos))
+        comparison_dict()
+        draw_ii()
+        print(draw_dict)
+        print(draw_dict_II)
+        print(dead_heat_check())
+
+
 
 
 while not done:
@@ -189,23 +218,10 @@ while not done:
     pygame.time.Clock().tick(FPS)
 
     for event in pygame.event.get():  # User did something
-        if event.type == pygame.QUIT:  # If user clicked close
-            done = True  # Flag that we are done so we exit this loop
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:  # Click ESC fo exit
-                done = True
-        elif event.type == pygame.MOUSEBUTTONUP and not win_check(draw_dict) and not win_check(draw_dict_II):  # event.pos - mouse coordinates
-            draw_figure(draw_coordinate(event.pos))
-            comparison_dict()
-            draw_ii()
-            print(draw_dict)
-            print(draw_dict_II)
-            print(dead_heat_check())
+        event_type(event)
 
     screen.fill(WHITE)
     playing_field()
-
-
 
     for key in draw_dict:
         if draw_dict[key]:
@@ -220,4 +236,9 @@ while not done:
     elif win_check(draw_dict_II):
         screen.blit(lose_image, lose_image_position)
 
+    if dead_heat_check() and not win_check(draw_dict) and not win_check(draw_dict_II):
+        screen.blit(dead_head_image, dead_head_image_position)
+
     pygame.display.flip()
+
+# Картинка ничьи, оформить внутренний блок нормально сделать ИИ алгоритм совершенным

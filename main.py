@@ -57,6 +57,8 @@ lose_image = pygame.image.load('images'+os.sep+'lose.png')
 lose_image_position = lose_image.get_rect(center=(int(W/2), int(H/2)))
 dead_head_image = pygame.image.load('images' + os.sep + 'dead_head.png')
 dead_head_image_position = dead_head_image.get_rect(center=(int(W/2), int(H/2)))
+cross_image = pygame.image.load('images' + os.sep + 'cross.png')
+zero_image = pygame.image.load('images' + os.sep + 'zero.png')
 
 
 class Cross:
@@ -66,10 +68,9 @@ class Cross:
         self.cen_pos_y = cen_pos_y
 
     def draw_it(self):
-        pygame.draw.line(screen, BLACK, (int(self.cen_pos_x - 83.5), int(self.cen_pos_y - 83.5)),
-                         (int(self.cen_pos_x + 83.5), int(self.cen_pos_y + 83.5)))
-        pygame.draw.line(screen, BLACK, (int(self.cen_pos_x - 83.5), int(self.cen_pos_y + 83.5)),
-                         (int(self.cen_pos_x + 83.5), int(self.cen_pos_y - 83.5)))  # FixIT HARDCODE
+        image_pos = cross_image.get_rect(center=(self.cen_pos_x, self.cen_pos_y))
+        screen.blit(cross_image, image_pos)
+
 
 
 class Zero:
@@ -79,7 +80,9 @@ class Zero:
         self.cen_pos_y = cen_pos_y
 
     def draw_it(self):
-        pygame.draw.circle(screen, BLACK, (self.cen_pos_x, self.cen_pos_y), 80, 1)
+        image_pos = zero_image.get_rect(center=(self.cen_pos_x, self.cen_pos_y))
+        screen.blit(zero_image, image_pos)
+
 
 
 def playing_field():

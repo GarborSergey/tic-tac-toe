@@ -1,6 +1,7 @@
 import pygame
 import random
 import os
+
 # Initialize the game engine
 pygame.init()
 # Define the colors we will use in RGB format
@@ -51,12 +52,12 @@ done = False
 FPS = 30
 
 # Images
-win_image = pygame.image.load('images'+os.sep+'win_post.png')
-win_image_position = win_image.get_rect(center=(int(W/2), int(H/2)))
-lose_image = pygame.image.load('images'+os.sep+'lose.png')
-lose_image_position = lose_image.get_rect(center=(int(W/2), int(H/2)))
+win_image = pygame.image.load('images' + os.sep + 'win_post.png')
+win_image_position = win_image.get_rect(center=(int(W / 2), int(H / 2)))
+lose_image = pygame.image.load('images' + os.sep + 'lose.png')
+lose_image_position = lose_image.get_rect(center=(int(W / 2), int(H / 2)))
 dead_head_image = pygame.image.load('images' + os.sep + 'dead_head.png')
-dead_head_image_position = dead_head_image.get_rect(center=(int(W/2), int(H/2)))
+dead_head_image_position = dead_head_image.get_rect(center=(int(W / 2), int(H / 2)))
 cross_image = pygame.image.load('images' + os.sep + 'cross.png')
 zero_image = pygame.image.load('images' + os.sep + 'zero.png')
 
@@ -72,7 +73,6 @@ class Cross:
         screen.blit(cross_image, image_pos)
 
 
-
 class Zero:
 
     def __init__(self, cen_pos_x, cen_pos_y):
@@ -82,7 +82,6 @@ class Zero:
     def draw_it(self):
         image_pos = zero_image.get_rect(center=(self.cen_pos_x, self.cen_pos_y))
         screen.blit(zero_image, image_pos)
-
 
 
 def playing_field():
@@ -127,21 +126,19 @@ def draw_figure(mouse_coordinate):
 
 # II drawing in random area
 def draw_ii():
-    # for not to loop
-    to_do = 0
-    for key in draw_dict_II:
-        if draw_dict_II[key] == False:
-            to_do += 1
-
-    while True:
-        if to_do != 0:
-            random_key_ind = str(random.randint(1, 9))
-            random_key = draw_dict_II['key' + random_key_ind]
-            if random_key == False:  # Don't touch it, because not None == True
-                draw_dict_II['key' + random_key_ind] = True
-                break
+    def check_areas(ar_1, ar_2, ar_3):
+        if ar_1 and ar_2:
+            return True
+        elif ar_2 and ar_3:
+            return True
+        elif ar_1 and ar_3:
+            return True
         else:
-            break
+            return False
+
+    line_1 = check_areas(draw_dict['key1'], draw_dict['key2'], draw_dict['key3'])
+    line_2 = check_areas(draw_dict['key4'], draw_dict['key5'], draw_dict['key6'])
+    line_3 = check_areas(draw_dict['key7'], draw_dict['key8'], draw_dict['key9'])
 
 
 # Comparison dicts if user draw in key II can't draw in this key
@@ -185,8 +182,9 @@ def dead_heat_check():
     else:
         return False
 
-def restart_game():
 
+# Script to restart
+def restart_game():
     for key in draw_dict:
         draw_dict[key] = False
 
@@ -210,8 +208,6 @@ def event_type(e):
         print(draw_dict)
         print(draw_dict_II)
         print(dead_heat_check())
-
-
 
 
 while not done:

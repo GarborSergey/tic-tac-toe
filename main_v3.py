@@ -13,6 +13,7 @@ H = 1000
 W = 1000
 size = [H, W]
 
+# Center coordinate
 area_cen_cord = {'key1': (int(W / 6), int(H / 6)),
                  'key2': (int(W / 2), int(H / 6)),
                  'key3': (int(W / 6 * 5), int(H / 6)),
@@ -23,6 +24,7 @@ area_cen_cord = {'key1': (int(W / 6), int(H / 6)),
                  'key8': (int(W / 2), int(H / 6 * 5)),
                  'key9': (int(W / 6 * 5), int(H / 6 * 5))
                  }
+# drawing areas users
 draw_dict = {'key1': False,
              'key2': False,
              'key3': False,
@@ -33,6 +35,7 @@ draw_dict = {'key1': False,
              'key8': False,
              'key9': False
              }
+# drawing areas II
 draw_dict_II = {'key1': False,
                 'key2': False,
                 'key3': False,
@@ -48,7 +51,9 @@ screen = pygame.display.set_mode(size)
 
 # Set the caption display
 pygame.display.set_caption("Tic-tac-toe")
+# For to loop
 done = False
+# FPS
 FPS = 30
 
 # Images
@@ -61,10 +66,13 @@ dead_head_image_position = dead_head_image.get_rect(center=(int(W / 2), int(H / 
 cross_image = pygame.image.load('images' + os.sep + 'cross.png')
 zero_image = pygame.image.load('images' + os.sep + 'zero.png')
 
+# step in game
 step = 0
+# For II algorithm
 lst = ['1', '3', '7', '9']
 
 
+# Cross class
 class Cross:
 
     def __init__(self, cen_pos_x, cen_pos_y):
@@ -76,6 +84,7 @@ class Cross:
         screen.blit(cross_image, image_pos)
 
 
+# Zero class
 class Zero:
 
     def __init__(self, cen_pos_x, cen_pos_y):
@@ -87,6 +96,7 @@ class Zero:
         screen.blit(zero_image, image_pos)
 
 
+# Drawing a playing field
 def playing_field():
     pygame.draw.line(screen, BLACK, (int(W / 3), 0), (int(W / 3), H))
     pygame.draw.line(screen, BLACK, (int(W / 3 + W / 3), 0), (int(W / 3 + W / 3), H))
@@ -127,13 +137,8 @@ def draw_figure(mouse_coordinate):
             draw_dict[key] = True
 
 
-def select_strategy():
-    strategy = random.randint(1, 3)
-    return strategy
-
-
-# II drawing in random area
-def draw_ii(strategy):
+# II drawing in area
+def draw_ii():
     global step, lst
 
     # Check users win, if 2 areas = True
@@ -147,6 +152,7 @@ def draw_ii(strategy):
         else:
             return False
 
+    # Check II win, if 2 areas = True
     def check_areas_II(ar_1, ar_2, ar_3):
         if draw_dict_II[ar_1] and draw_dict_II[ar_2] and draw_dict[ar_3] == False:
             return True
@@ -157,6 +163,7 @@ def draw_ii(strategy):
         else:
             return False
 
+    # II drawing in three free area for not to lose
     def draw_in_free(ar_1, ar_2, ar_3):
         if draw_dict[ar_1] == False:
             draw_dict_II[ar_1] = True
@@ -167,6 +174,7 @@ def draw_ii(strategy):
         else:
             pass
 
+    # II drawing in three free area for to win
     def draw_in_free_II(ar_1, ar_2, ar_3):
         if draw_dict_II[ar_1] == False:
             draw_dict_II[ar_1] = True
@@ -252,7 +260,7 @@ def draw_ii(strategy):
                 break
 
 
-# Comparison dicts if user draw in key II can't draw in this key
+# Comparison dicts if user draw in key, II can't draw in this key
 def comparison_dict():
     for key in draw_dict:
         if draw_dict[key] == True:
@@ -302,11 +310,14 @@ def restart_game():
 
     for key in draw_dict_II:
         draw_dict_II[key] = False
+
+    # Update global variables
     step = 0
     lst = ['1', '3', '7', '9']
-    draw_ii(1)
+    draw_ii()
 
 
+# Event handling
 def event_type(e):
     global done, step
     if e.type == pygame.QUIT:
@@ -320,10 +331,10 @@ def event_type(e):
         step += 1
         draw_figure(draw_coordinate(event.pos))
         comparison_dict()
-        draw_ii(1)
+        draw_ii()
 
 
-draw_ii(1) # For II go first
+draw_ii()  # For II go first
 
 while not done:
     # This limits the wile loop to a max of 30 times per second
@@ -353,5 +364,3 @@ while not done:
         screen.blit(dead_head_image, dead_head_image_position)
 
     pygame.display.flip()
-
-

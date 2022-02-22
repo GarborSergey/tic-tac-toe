@@ -126,19 +126,74 @@ def draw_figure(mouse_coordinate):
 
 # II drawing in random area
 def draw_ii():
+    # Check users win, if 2 areas = True
     def check_areas(ar_1, ar_2, ar_3):
-        if ar_1 and ar_2:
+        if draw_dict[ar_1] and draw_dict[ar_2] and draw_dict_II[ar_3] == False:
             return True
-        elif ar_2 and ar_3:
+        elif draw_dict[ar_2] and draw_dict[ar_3] and draw_dict_II[ar_1] == False:
             return True
-        elif ar_1 and ar_3:
+        elif draw_dict[ar_1] and draw_dict[ar_3] and draw_dict_II[ar_2] == False:
             return True
         else:
             return False
 
-    line_1 = check_areas(draw_dict['key1'], draw_dict['key2'], draw_dict['key3'])
-    line_2 = check_areas(draw_dict['key4'], draw_dict['key5'], draw_dict['key6'])
-    line_3 = check_areas(draw_dict['key7'], draw_dict['key8'], draw_dict['key9'])
+    def draw_in_free(ar_1, ar_2, ar_3):
+        if draw_dict[ar_1] == False:
+            draw_dict_II[ar_1] = True
+        elif draw_dict[ar_2] == False:
+            draw_dict_II[ar_2] = True
+        elif draw_dict[ar_3] == False:
+            draw_dict_II[ar_3] = True
+        else:
+            pass
+
+    line_1 = check_areas('key1', 'key2', 'key3')
+    line_2 = check_areas('key4', 'key5', 'key6')
+    line_3 = check_areas('key7', 'key8', 'key9')
+
+    column_1 = check_areas('key1', 'key4', 'key7')
+    column_2 = check_areas('key2', 'key5', 'key8')
+    column_3 = check_areas('key3', 'key6', 'key9')
+
+    diagonal_1 = check_areas('key3', 'key5', 'key7')
+    diagonal_2 = check_areas('key1', 'key5', 'key9')
+
+    to_do = 0
+    for key in draw_dict_II:
+        if draw_dict_II[key] == False:
+            to_do += 1
+
+    while to_do != 0:
+        if line_1:
+            draw_in_free('key1', 'key2', 'key3')
+            break
+        elif line_2:
+            draw_in_free('key4', 'key5', 'key6')
+            break
+        elif line_3:
+            draw_in_free('key7', 'key8', 'key9')
+            break
+        elif column_1:
+            draw_in_free('key1', 'key4', 'key7')
+            break
+        elif column_2:
+            draw_in_free('key2', 'key5', 'key8')
+            break
+        elif column_3:
+            draw_in_free('key3', 'key6', 'key9')
+            break
+        elif diagonal_1:
+            draw_in_free('key3', 'key5', 'key7')
+            break
+        elif diagonal_2:
+            draw_in_free('key1', 'key5', 'key9')
+            break
+        else:
+            random_key_ind = str(random.randint(1, 9))
+            random_key = draw_dict_II['key' + random_key_ind]
+            if random_key == False:  # Don't touch it, because not None == True
+                draw_dict_II['key' + random_key_ind] = True
+                break
 
 
 # Comparison dicts if user draw in key II can't draw in this key

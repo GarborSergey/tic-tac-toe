@@ -64,6 +64,7 @@ zero_image = pygame.image.load('images' + os.sep + 'zero.png')
 step = 0
 lst = ['1', '3', '7', '9']
 
+
 class Cross:
 
     def __init__(self, cen_pos_x, cen_pos_y):
@@ -134,6 +135,7 @@ def select_strategy():
 # II drawing in random area
 def draw_ii(strategy):
     global step, lst
+
     # Check users win, if 2 areas = True
     def check_areas(ar_1, ar_2, ar_3):
         if draw_dict[ar_1] and draw_dict[ar_2] and draw_dict_II[ar_3] == False:
@@ -175,97 +177,79 @@ def draw_ii(strategy):
         else:
             pass
 
-    def strategy_1():
-        print(lst)
-        if step == 0:
-            draw_dict_II['key5'] = True
-        elif step == 1:
+    if step == 0:
+        draw_dict_II['key5'] = True
+    elif step == 1:
+        n = random.choice(lst)
+        if draw_dict_II['key' + n] == False:
+            draw_dict_II['key' + n] = True
+            lst.remove(n)
+        elif draw_dict_II['key' + n] == None:
+            lst.remove(n)
+            n = random.choice(lst)
+            draw_dict_II['key' + n] = True
+            lst.remove(n)
+    elif step == 2:
+        line_1 = check_areas('key1', 'key2', 'key3')
+        line_3 = check_areas('key7', 'key8', 'key9')
+        column_1 = check_areas('key1', 'key4', 'key7')
+        column_3 = check_areas('key3', 'key6', 'key9')
+        if line_1:
+            draw_in_free('key1', 'key2', 'key3')
+        elif line_3:
+            draw_in_free('key7', 'key8', 'key9')
+        elif column_1:
+            draw_in_free('key1', 'key4', 'key7')
+        elif column_3:
+            draw_in_free('key3', 'key6', 'key9')
+        else:
             n = random.choice(lst)
             if draw_dict_II['key' + n] == False:
-                draw_dict_II['key'+n] = True
+                draw_dict_II['key' + n] = True
                 lst.remove(n)
-            elif draw_dict_II['key' + n] == None:
-                lst.remove(n)
-                n = random.choice(lst)
-                draw_dict_II['key'+n] = True
-                lst.remove(n)
-        elif step == 2:
-            line_1 = check_areas('key1', 'key2', 'key3')
-            line_3 = check_areas('key7', 'key8', 'key9')
-            column_1 = check_areas('key1', 'key4', 'key7')
-            column_3 = check_areas('key3', 'key6', 'key9')
-            if line_1:
-                draw_in_free('key1', 'key2', 'key3')
-            elif line_3:
-                draw_in_free('key7', 'key8', 'key9')
-            elif column_1:
-                draw_in_free('key1', 'key4', 'key7')
-            elif column_3:
-                draw_in_free('key3', 'key6', 'key9')
             else:
+                lst.remove(n)
                 n = random.choice(lst)
                 if draw_dict_II['key' + n] == False:
                     draw_dict_II['key' + n] = True
                     lst.remove(n)
-                else:
-                    lst.remove(n)
-                    n = random.choice(lst)
-                    if draw_dict_II['key' + n] == False:
-                        draw_dict_II['key'+n] = True
-                        lst.remove(n)
 
-        elif step == 3:
-            line_1 = check_areas_II('key1', 'key2', 'key3')
-            line_2 = check_areas_II('key4', 'key5', 'key6')
-            line_3 = check_areas_II('key7', 'key8', 'key9')
-            column_1 = check_areas_II('key1', 'key4', 'key7')
-            column_2 = check_areas_II('key2', 'key5', 'key8')
-            column_3 = check_areas_II('key3', 'key6', 'key9')
-            diagonal_1 = check_areas_II('key1', 'key5', 'key9')
-            diagonal_2 = check_areas_II('key7', 'key5', 'key3')
+    elif step == 3:
+        line_1 = check_areas_II('key1', 'key2', 'key3')
+        line_2 = check_areas_II('key4', 'key5', 'key6')
+        line_3 = check_areas_II('key7', 'key8', 'key9')
+        column_1 = check_areas_II('key1', 'key4', 'key7')
+        column_2 = check_areas_II('key2', 'key5', 'key8')
+        column_3 = check_areas_II('key3', 'key6', 'key9')
+        diagonal_1 = check_areas_II('key1', 'key5', 'key9')
+        diagonal_2 = check_areas_II('key7', 'key5', 'key3')
 
-            if line_1:
-                draw_in_free_II('key1', 'key2', 'key3')
-            elif line_2:
-                draw_in_free_II('key4', 'key5', 'key6')
-            elif line_3:
-                draw_in_free_II('key7', 'key8', 'key9')
-            elif column_1:
-                draw_in_free_II('key1', 'key4', 'key7')
-            elif column_2:
-                draw_in_free_II('key2', 'key5', 'key8')
-            elif column_3:
-                draw_in_free_II('key3', 'key6', 'key9')
-            elif diagonal_1:
-                draw_in_free_II('key1', 'key5', 'key9')
-            elif diagonal_2:
-                draw_in_free_II('key7', 'key5', 'key3')
-            else:
-                for key in draw_dict_II:
-                    if draw_dict_II[key] == False:
-                        draw_dict_II[key] = True
-                        break
+        if line_1:
+            draw_in_free_II('key1', 'key2', 'key3')
+        elif line_2:
+            draw_in_free_II('key4', 'key5', 'key6')
+        elif line_3:
+            draw_in_free_II('key7', 'key8', 'key9')
+        elif column_1:
+            draw_in_free_II('key1', 'key4', 'key7')
+        elif column_2:
+            draw_in_free_II('key2', 'key5', 'key8')
+        elif column_3:
+            draw_in_free_II('key3', 'key6', 'key9')
+        elif diagonal_1:
+            draw_in_free_II('key1', 'key5', 'key9')
+        elif diagonal_2:
+            draw_in_free_II('key7', 'key5', 'key3')
         else:
             for key in draw_dict_II:
                 if draw_dict_II[key] == False:
                     draw_dict_II[key] = True
                     break
-
-
-
-
-    def strategy_2():
-        pass
-
-    def strategy_3():
-        pass
-
-    if strategy == 1:
-        strategy_1()
-    elif strategy == 2:
-        strategy_2()
-    elif strategy == 3:
-        strategy_3()
+    else:
+        for key in draw_dict_II:
+            if draw_dict_II[key] == False:
+                draw_dict_II[key] = True
+                break
 
 
 # Comparison dicts if user draw in key II can't draw in this key
@@ -337,16 +321,10 @@ def event_type(e):
         draw_figure(draw_coordinate(event.pos))
         comparison_dict()
         draw_ii(1)
-        print(draw_dict_II)
-        print(step)
 
 
+draw_ii(1) # For II go first
 
-
-
-
-draw_ii(1)
-print(step)
 while not done:
     # This limits the wile loop to a max of 30 times per second
     # Leave this out, and we will use all CPU we can
@@ -376,4 +354,4 @@ while not done:
 
     pygame.display.flip()
 
-# Картинка ничьи, оформить внутренний блок нормально сделать ИИ алгоритм совершенным
+

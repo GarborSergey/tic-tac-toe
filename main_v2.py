@@ -260,9 +260,6 @@ def event_type(e):
         draw_figure(draw_coordinate(event.pos))
         comparison_dict()
         draw_ii()
-        print(draw_dict)
-        print(draw_dict_II)
-        print(dead_heat_check())
 
 
 while not done:
